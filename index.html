@@ -1,1 +1,65 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uzmi AI</title>
+<style>
+  body { margin: 0; background: #131314; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+  .top { padding: 15px; border-bottom: 1px solid #333; font-size: 18px; font-weight: bold; color: #a8c7fa; }
+  #chat { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  #hi { font-size: 26px; font-weight: bold; background: linear-gradient(90deg, #4285f4, #d96570); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cur { display: inline-block; width: 3px; height: 24px; background: #a8c7fa; animation: b 0.7s infinite; }
+  @keyframes b { 50% { opacity: 0; } }
+  .m { padding: 10px 15px; border-radius: 15px; max-width: 80%; }
+  .u { background: #2b2d30; align-self: flex-end; }
+  .a { background: #1e1f20; border: 1px solid #333; align-self: flex-start; }
+  .bar { display: flex; padding: 10px; gap: 8px; background: #131314; }
+  input { flex: 1; padding: 12px; border-radius: 20px; border: 1px solid #444; background: #1e1f20; color: #fff; font-size: 16px; outline: none; }
+  button { width: 45px; height: 45px; border-radius: 50%; border: none; background: #4285f4; color: #fff; font-size: 18px; }
+</style>
+</head>
+<body>
+<div class="top">✦ Uzmi AI</div>
+<div id="chat"><div><span id="hi"></span><span class="cur"></span></div></div>
+<div class="bar">
+  <input id="inp" placeholder="Savol yozing..." onkeydown="if(event.key==='Enter') go()">
+  <button onclick="go()">➤</button>
+</div>
+<script>
+  const t = "Assalomu alaykum! Bugun sizga qanday yordam bera olaman?";
+  let i = 0;
+  function w() {
+    if (i < t.length) {
+      document.getElementById("hi").innerHTML += t.charAt(i++);
+      setTimeout(w, 50);
+    }
+  }
+  w();
+
+  function go() {
+    const inp = document.getElementById("inp");
+    const v = inp.value.trim();
+    if (!v) return;
+    add(v, "u");
+    inp.value = "";
+    let r = "Ajoyib savol! Tez orada barcha mavzularni o'rganib olaman.";
+    const s = v.toLowerCase();
+    if (s.includes("salom")) r = "Va alaykum assalom! Qanday yordam kerak?";
+    else if (s.includes("ism")) r = "Mening ismim Uzmi AI.";
+    else if (s.includes("soat")) r = "Hozir soat: " + new Date().toLocaleTimeString();
+    setTimeout(() => add(r, "a"), 400);
+  }
+
+  function add(txt, c) {
+    const d = document.createElement("div");
+    d.className = "m " + c;
+    d.textContent = txt;
+    const ch = document.getElementById("chat");
+    ch.appendChild(d);
+    ch.scrollTop = ch.scrollHeight;
+  }
+</script>
+</body>
+</html>
