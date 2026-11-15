@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Uzmi AI</title>
-  <script src="https://puter.com"></script>
   <style>
     body { margin: 0; background: #131314; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
     .top { padding: 14px 16px; border-bottom: 1px solid #333; font-size: 18px; font-weight: bold; color: #a8c7fa; display: flex; align-items: center; }
@@ -50,13 +49,22 @@
       const botDiv = add("O'ylamoqda...", "a");
 
       try {
-        const prompt = "Sen o'zbek tilida javob beruvchi aqlli yordamchisan. Isming Uzmi AI. Savol: " + v;
-        const response = await puter.ai.chat(prompt);
-        const reply = response.message ? response.message.content : String(response);
+        const res = await fetch("https://pollinations.ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: "Sen o'zbek tilida ravon va aniq javob beruvchi aqlli yordamchisan. Isming Uzmi AI." },
+              { role: "user", content: v }
+            ],
+            model: "openai"
+          })
+        });
+        const reply = await res.text();
         botDiv.textContent = "";
         typeReply(botDiv, reply);
       } catch (e) {
-        botDiv.textContent = "Xatolik yuz berdi. Qayta urinib ko'ring.";
+        botDiv.textContent = "Internet bilan bog'lanishda xatolik yuz berdi.";
       }
     }
 
