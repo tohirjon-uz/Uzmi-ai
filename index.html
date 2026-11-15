@@ -55,7 +55,13 @@
 
       for (let attempt = 1; attempt <= 5; attempt++) {
         try {
-          const url = "https://googleapis.com" + apiKey;
+          const u0 = "https://generativelanguage";
+const u1 = u0 + ".googleapis.com";
+
+const u2 = "/v1beta/models/gemini-3.8-flash";
+const u3 = ":generateContent?key=";
+const url = u1 + u2 + u3 + apiKey;
+
           const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
