@@ -53,36 +53,35 @@
       inp.value = "";
       const botDiv = add("O'ylamoqda...", "a");
 
-      const models = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash-lite"];
-      let success = false;
-
-      for (let m of models) {
-        for (let attempt = 0; attempt < 2; attempt++) {
-          try {
-            const url = `https://googleapis.com{m}:generateContent?key=${apiKey}`;
-            const res = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: "Sen o'zbek tilida javob beruvchi aqlli yordamchisan. Isming Uzmi AI. Savol: " + v }] }]
-              })
-            });
-            const data = await res.json();
-            if (data.candidates && data.candidates[0]) {
-              const reply = data.candidates[0].content.parts[0].text;
-              botDiv.textContent = "";
-              typeReply(botDiv, reply);
-              success = true;
-              break;
-            }
-          } catch (e) {}
-          await new Promise(r => setTimeout(r, 1000));
+      for (let attempt = 1; attempt <= 5; attempt++) {
+        try {
+          const url = "https://googleapis.com" + apiKey;
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: "Sen o'zbek tilida javob beruvchi aqlli yordamchisan. Isming Uzmi AI. Savol: " + v }] }]
+            })
+          });
+          const data = await res.json();
+          if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+            const reply = data.candidates[0].content.parts[0].text;
+            botDiv.textContent = "";
+            typeReply(botDiv, reply);
+            return;
+          }
+          if (data.error && attempt === 5) {
+            botDiv.textContent = "Server band (" + data.error.message + "). Birozdan keyin urinib ko'ring.";
+            return;
+          }
+        } catch (e) {
+          if (attempt === 5) {
+            botDiv.textContent = "Tarmoq xatoligi yuz berdi.";
+            return;
+          }
         }
-        if (success) break;
-      }
-
-      if (!success) {
-        botDiv.textContent = "Server hozir juda band. 10 soniyadan keyin qayta yuboring.";
+        botDiv.textContent = "Server band, qayta urinilmoqda (" + attempt + "/5)...";
+        await new Promise(r => setTimeout(r, 2000));
       }
     }
 
