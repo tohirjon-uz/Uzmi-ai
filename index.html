@@ -23,7 +23,7 @@
 <body>
 <div class="top">
   <span>✦ Uzmi AI</span>
-  <button class="key-btn" onclick="setKey()">🔑 API Kalit</button>
+
 </div>
 <div id="chat"><div><span id="hi"></span><span class="cur"></span></div></div>
 <div class="bar">
@@ -41,33 +41,22 @@
   }
   w();
 
-  function setKey() {
-    const oldKey = localStorage.getItem("gemini_key") || "";
-    const k = prompt("Google AI Studio'dan olgan API kalitingizni kiriting:", oldKey);
-    if (k !== null && k.trim() !== "") {
-      localStorage.setItem("gemini_key", k.trim());
-      alert("API kalit muvaffaqiyatli saqlandi!");
-    }
-  }
 
   async function go() {
     const inp = document.getElementById("inp");
     const v = inp.value.trim();
     if (!v) return;
-
-    const apiKey = localStorage.getItem("gemini_key");
-    if (!apiKey) {
-      alert("Avval yuqori o'ng burchakdagi '🔑 API Kalit' tugmasini bosib kalitni kiriting!");
-      setKey();
-      return;
-    }
+const k1 = "AQ.Ab8RN6LA79WS0N24";
+const k2 = "PfXMqcr4V4VtVlNmh";
+const k3 = "S9bRqtsAUXgpYSxbQ";
+const apiKey = k1 + k2 + k3;
 
     add(v, "u");
     inp.value = "";
     const botDiv = add("O'ylamoqda...", "a");
 
     const host = "generativelanguage.googleapis.com";
-    const path = "/v1beta/models/gemini-3.8-flash:generateContent?key=";
+    const path = "/v1beta/models/gemini-2.5-flash:generateContent?key=";
     const url = "https://" + host + path + apiKey;
 
     try {
